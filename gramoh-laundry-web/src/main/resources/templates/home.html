@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Gramoh Laundry</title>
+
+  <style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f5f8fd;
+    }
+    .admin-dashboard-container {
+        display: flex;
+        min-height: 100vh;
+    }
+    .sidebar {
+        width: 240px;
+        background: linear-gradient(180deg, #1565c0 70%, #1976d2 100%);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        padding: 32px 0 0 0;
+        box-shadow: 2px 0 12px rgba(21,101,192,0.08);
+        min-height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 10;
+        transition: left 0.2s;
+    }
+    .sidebar h2 {
+        font-size: 1.5rem;
+        margin: 0 0 32px 32px;
+        color: #fff;
+    }
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-left: 32px;
+        margin-right: 32px;
+    }
+    .sidebar-nav a {
+        display: block;
+        padding: 12px 18px;
+        border-radius: 6px;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.08em;
+        background: transparent;
+        transition: background 0.18s, color 0.18s;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .main-content {
+        margin-left: 240px;
+        padding: 48px 32px 32px 32px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 24px;
+        background: #b7d7f6;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(21,101,192,0.07);
+    }
+
+    .login-btn {
+        padding: 14px 28px;
+        background: #1565c0;
+        color: #fff;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background .2s;
+    }
+
+    .login-btn:hover {
+        background: #0d47a1;
+    }
+
+    .sidebar-toggle {
+        display: none;
+    }
+
+    @media(max-width: 900px) {
+        .sidebar { left: -260px; }
+        .sidebar.open { left: 0; }
+        .main-content { margin-left: 0; }
+        .sidebar-toggle {
+            display: block;
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            background: #1565c0;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 1.3em;
+            z-index: 20;
+            cursor: pointer;
+        }
+    }
+  </style>
+
+  <script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById('adminSidebar');
+        sidebar.classList.toggle('open');
+    }
+  </script>
+</head>
+
+<body>
+<div class="admin-dashboard-container">
+  <button class="sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidebar()">&#9776;</button>
+
+  <nav class="sidebar" id="adminSidebar">
+    <h2>Gramoh Laundry</h2>
+    <div class="sidebar-nav">
+      <a th:href="@{/}" class="active">Home</a>
+      <a th:href="@{/login}">Login</a>
+
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <h1>Welcome to Gramoh Laundry Service</h1>
+    <p>Professional cleaning with care, comfort and reliability.</p>
+
+    <a th:href="@{/login}">
+      <button class="login-btn">Proceed to Login</button>
+    </a>
+  </div>
+</div>
+</body>
+</html>

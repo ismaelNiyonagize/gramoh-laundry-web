@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Orders Verification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #e3f2fd; margin: 0; padding: 0; }
+    h2 { text-align: center; color: #1565c0; margin-top: 40px; margin-bottom: 24px; font-size: 2rem; letter-spacing: 1px; }
+    table { background: #fff; max-width: 900px; margin: 32px auto; border-radius: 10px; box-shadow: 0 2px 12px rgba(21,101,192,0.10); width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; }
+    th, td { padding: 14px 16px; text-align: center; font-size: 1.05rem; }
+    th { background: #bbdefb; color: #1565c0; font-weight: 600; border-bottom: 1px solid #90caf9; }
+    td { background: #fff; color: #2d3a4b; border-bottom: 1px solid #e3f2fd; }
+    tr:last-child td { border-bottom: none; }
+    a { color: #1976d2; background: #e3f2fd; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; box-shadow: 0 1px 4px rgba(21,101,192,0.07); transition: background 0.2s, color 0.2s; }
+    a:hover { background: #1976d2; color: #fff; }
+    @media (max-width: 700px) {
+        table { max-width: 98vw; margin: 18px 1vw; border-radius: 8px; box-shadow: 0 1px 6px rgba(21,101,192,0.07); }
+        th, td { padding: 10px 8px; font-size: 1rem; }
+        h2 { font-size: 1.4rem; margin-top: 24px; }
+        a { width: 90vw; display: block; margin: 10px auto; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+<h2>Orders Awaiting Verification</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>Order ID</th>
+    <th>Client Name</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="order : ${orders}">
+    <td th:text="${order.id}"></td>
+    <td th:text="${order.client != null ? order.client.fullName : 'N/A'}"></td>
+    <td th:text="${order.status}"></td>
+    <td>
+      <form th:action="@{/admin/orders/verify}" method="post" style="display:inline;">
+        <input type="hidden" name="orderId" th:value="${order.id}" />
+        <button type="submit"
+                style="background:#1976d2;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">
+          Verify Clothes
+        </button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<a th:href="@{/admin}">Home page for admin</a>
+
+</body>
+</html>

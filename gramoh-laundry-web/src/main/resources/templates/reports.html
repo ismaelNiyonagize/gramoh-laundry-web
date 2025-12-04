@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Reports</title>
+    <style>
+        table { width: 100%; border-collapse: collapse;}
+        th, td { padding: 12px; border: 1px solid #ccc; text-align: left; }
+        th { background-color: #f5f5f5; }
+        .btn {
+            padding: 6px 12px;
+            background-color: #2196f3;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .btn:hover { background-color: #1565c0; }
+    </style>
+</head>
+
+<body>
+<h2>Available Orders</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Client</th>
+
+        <th>Status</th>
+        <th>Print PDF</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}">1</td>
+        <td th:text="${order.client.fullName}">Client Name</td>
+
+        <td th:text="${order.status}">Pending</td>
+        <td>
+            <a class="btn" th:href="@{/clothes/pdf/{id}(id=${order.id})}">
+                Print PDF
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<br/>
+
+
+<a th:href="@{/admin}">Home page for admin</a>
+</body>
+</html>

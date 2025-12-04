@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Garment Types Management</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        h2 { margin-bottom: 15px; }
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th { background-color: #f2f2f2; }
+        button {
+            padding: 6px 12px;
+            margin: 3px;
+            border: none;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        button.delete-btn { background-color: #dc3545; }
+        button.edit-btn { background-color: #28a745; }
+        input {
+            padding: 7px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<h2>Garment Types Management</h2>
+
+<!-- Form to Add & Update -->
+<div>
+    <input type="hidden" id="garmentId">
+    <input type="text" id="garmentName" placeholder="Garment name (e.g., Shirt)">
+    <input type="number" step="0.1" id="garmentWeight" placeholder="Weight per item (kg)">
+    <button onclick="saveGarment()">Save</button>
+</div>
+
+<!-- Table -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Weight (kg)</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody id="garmentTableBody"></tbody>
+</table>
+
+<script>
+    window.onload = loadGarments;
+
+    function loadGarments() {
+        fetch("/garments/list")
+            .then(res => res.json())
+            .then(data => {
+                let rows = "";
+                data.forEach(g => {
+                    rows += `
+                        <tr>
+                            <td>${g.id}</td>
+                            <td>${g.name}</td>
+                            <td>${g.weightPerItem}</td>
+                            <td>
+                                <button class="edit-btn" onclick="editGarment(${g.id}, '${g.name}', ${g.weightPerItem})">Edit</button>
+                                <button class="delete-btn" onclick="deleteGarment(${g.id})">Delete</button>
+                            </td>
+                        </tr>`;
+                });
+                document.getElementById("garmentTableBody").innerHTML = rows;
+            });
+    }
+
+    function saveGarment() {
+        const id = document.getElementById("garmentId").value;
+        const name = document.getElementById("garmentName").value;
+        const weight = document.getElementById("garmentWeight").value;
+
+        const body = JSON.stringify({ name: name, weightPerItem: weight });
+
+        const url = id ? `/garments/update/${id}` : "/garments/add";
+        const method = id ? "PUT" : "POST";
+
+        fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: body
+        }).then(() => {
+            clearForm();
+            loadGarments();
+        });
+    }
+
+    function editGarment(id, name, weight) {
+        document.getElementById("garmentId").value = id;
+        document.getElementById("garmentName").value = name;
+        document.getElementById("garmentWeight").value = weight;
+    }
+
+    function deleteGarment(id) {
+        if (!confirm("Delete this garment type?")) return;
+
+        fetch(`/garments/delete/${id}`, {
+            method: "DELETE"
+        }).then(() => loadGarments());
+    }
+
+    function clearForm() {
+        document.getElementById("garmentId").value = "";
+        document.getElementById("garmentName").value = "";
+        document.getElementById("garmentWeight").value = "";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Client Information Form</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<h2>Complete Your Client Information</h2>
+
+<!--
+    The form binds to the "client" object in the model,
+    which is populated by ClientController.showClientForm()
+-->
+<form th:action="@{/client/save}" th:object="${client}" method="post">
+
+    <!-- Hidden field for client ID (used when editing existing client) -->
+    <input type="hidden" th:field="*{id}"/>
+
+    <!-- Full Name -->
+    <label>Full Name:</label><br>
+    <input type="text" th:field="*{fullName}" placeholder="Enter your full name" required><br><br>
+
+    <!-- Phone -->
+    <label>Phone:</label><br>
+    <input type="text" th:field="*{phone}" placeholder="Enter your phone number" required><br><br>
+
+    <!-- Address -->
+    <label>Address:</label><br>
+    <input type="text" th:field="*{address}" placeholder="Enter your address" required><br><br>
+
+    <!-- Package Selection -->
+    <label>Subscription Package:</label><br>
+    <select th:field="*{subscribedPackage}" required>
+        <option value="" disabled th:selected="${client.subscribedPackage == null}">-- Choose Package --</option>
+        <option th:each="pkg : ${packages}"
+                th:value="${pkg.id}"
+                th:text="${pkg.name}"
+                th:selected="${client.subscribedPackage != null} ? ${pkg.id} == ${client.subscribedPackage.id} : false">
+        </option>
+    </select>
+    <br><br>
+
+    <!-- Submit button -->
+    <button type="submit">Save Information</button>
+</form>
+
+<!-- Optional link back to login or dashboard -->
+<p><a th:href="@{/client/dashboard}">Go to Dashboard</a></p>
+
+
+<a href="client-dashboard.html">client Home page </a>
+
+</body>
+</html>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #e3f2fd;
+        margin: 0;
+        padding: 0;
+        color: #1a237e;
+    }
+    h2 {
+        color: #1565c0;
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 28px;
+        font-size: 2rem;
+        letter-spacing: 0.5px;
+    }
+    form {
+        background: #fff;
+        max-width: 420px;
+        margin: 32px auto 0 auto;
+        padding: 32px 28px 24px 28px;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px rgba(21,101,192,0.10);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    label {
+        color: #1976d2;
+        font-weight: 500;
+        margin-bottom: 4px;
+        font-size: 1.08em;
+    }
+    input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1.5px solid #90caf9;
+        border-radius: 6px;
+        font-size: 1.08em;
+        background: #e3f2fd;
+        color: #1a237e;
+        margin-bottom: 12px;
+        transition: border 0.2s, box-shadow 0.2s;
+        outline: none;
+    }
+    input[type="text"]:focus {
+        border: 2px solid #1976d2;
+        background: #fff;
+        box-shadow: 0 0 0 2px #bbdefb;
+    }
+    button[type="submit"] {
+        background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 0;
+        font-size: 1.12em;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 2px 8px rgba(21,101,192,0.08);
+        transition: background 0.2s;
+    }
+    button[type="submit"]:hover {
+        background: linear-gradient(90deg, #1565c0 60%, #1976d2 100%);
+    }
+    p {
+        text-align: center;
+        margin-top: 32px;
+    }
+    a {
+        color: #1976d2;
+        background: #e3f2fd;
+        padding: 10px 22px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        box-shadow: 0 1px 4px rgba(21,101,192,0.07);
+        transition: background 0.2s, color 0.2s;
+        display: inline-block;
+    }
+    a:hover {
+        background: #1976d2;
+        color: #fff;
+    }
+    @media (max-width: 600px) {
+        h2 {
+            font-size: 1.3rem;
+            margin-top: 24px;
+        }
+        form {
+            max-width: 98vw;
+            padding: 18px 6vw 18px 6vw;
+        }
+        button[type="submit"] {
+            font-size: 1rem;
+            padding: 10px 0;
+        }
+        a {
+            font-size: 1rem;
+            padding: 10px 0;
+            width: 95vw;
+        }
+    }
+</style>

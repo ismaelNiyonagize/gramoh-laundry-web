@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Client Delivery Time Slot</title>
+</head>
+<body>
+<h2>Delivery Details for Order #<span th:text="${order.id}"></span></h2>
+
+<div th:if="${order.deliverySlot != null}">
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Client</th>
+            <td th:text="${order.client.fullName}"></td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td th:text="${order.status}"></td>
+        </tr>
+        <tr>
+            <th>Delivery Date</th>
+            <td th:text="${order.deliveryDate != null ? order.deliveryDate : 'Not set'}"></td>
+        </tr>
+        <tr>
+            <th>Time Slot</th>
+            <td th:text="${order.deliverySlot}"></td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${order.deliverySlot == null}">
+    <p><em>No delivery slot selected yet for this order.</em></p>
+</div>
+
+<br/>
+<a href="/admin/orders">← Back to Orders</a>
+
+<a th:href="@{/admin}">Home page for admin</a>
+</body>
+</html>
