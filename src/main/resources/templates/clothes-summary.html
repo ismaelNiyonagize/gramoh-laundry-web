@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Clothes Summary</title>
+</head>
+<body>
+<h2>Clothes Added for Order #<span th:text="${order.id}"></span></h2>
+
+<p><strong>Client:</strong> <span th:text="${order.client.fullName}"></span></p>
+<p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Quantity</th>
+        <th>Notes</th>
+        <th>Image</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="cloth : ${clothesList}">
+        <td th:text="${cloth.type}"></td>
+        <td th:text="${cloth.quantity}"></td>
+        <td th:text="${cloth.notes}"></td>
+        <td>
+            <img th:src="${cloth.imageUrl}" alt="Cloth Image" width="80" height="80"
+                 th:if="${cloth.imageUrl != null and cloth.imageUrl != ''}">
+            <span th:if="${cloth.imageUrl == null or cloth.imageUrl == ''}">No Image</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<a href="/admin/orders">← Back to Orders</a>
+
+<a href="client-dashboard.html">client Home page </a>
+</body>
+</html>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f0f6fb;
+        margin: 0;
+        padding: 0;
+        color: #1a237e;
+    }
+    h2 {
+        color: #1565c0;
+        text-align: center;
+        margin-top: 32px;
+    }
+    p {
+        margin: 12px 0 12px 0;
+        font-size: 1.1em;
+        text-align: center;
+    }
+    table {
+        width: 95%;
+        max-width: 900px;
+        margin: 32px auto 0 auto;
+        border-collapse: collapse;
+        background: #e3f2fd;
+        box-shadow: 0 2px 12px rgba(21,101,192,0.08);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    th, td {
+        padding: 14px 10px;
+        text-align: center;
+    }
+    thead {
+        background: #1976d2;
+        color: #fff;
+    }
+    tr:nth-child(even) {
+        background: #bbdefb;
+    }
+    tr:nth-child(odd) {
+        background: #e3f2fd;
+    }
+    th {
+        font-size: 1.08em;
+        letter-spacing: 0.5px;
+    }
+    img {
+        border-radius: 8px;
+        border: 2px solid #90caf9;
+        background: #fff;
+        object-fit: cover;
+    }
+    a {
+        display: inline-block;
+        margin: 32px auto 0 auto;
+        color: #1976d2;
+        background: #e3f2fd;
+        padding: 10px 22px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        box-shadow: 0 1px 4px rgba(21,101,192,0.07);
+        transition: background 0.2s, color 0.2s;
+    }
+    a:hover {
+        background: #1976d2;
+        color: #fff;
+    }
+    @media (max-width: 700px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+        table {
+            width: 98%;
+            margin: 18px auto 0 auto;
+        }
+        thead tr {
+            display: none;
+        }
+        tr {
+            margin-bottom: 18px;
+            background: #e3f2fd !important;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(21,101,192,0.07);
+        }
+        td {
+            position: relative;
+            padding-left: 50%;
+            text-align: left;
+            min-height: 40px;
+            border-bottom: 1px solid #bbdefb;
+        }
+        td:before {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            width: 45%;
+            white-space: nowrap;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        td:nth-of-type(1):before { content: "Type"; }
+        td:nth-of-type(2):before { content: "Quantity"; }
+        td:nth-of-type(3):before { content: "Notes"; }
+        td:nth-of-type(4):before { content: "Image"; }
+        img {
+            width: 60px;
+            height: 60px;a
+        }
+    }
+

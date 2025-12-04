@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Clothes Summary</title>
+</head>
+<body>
+
+<h2>Clothes Added for Order #<span th:text="${order.id}"></span></h2>
+
+<p><strong>Client:</strong> <span th:text="${order.client.fullName}"></span></p>
+<p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+
+<!-- ===================== ADD CLOTH FORM ===================== -->
+<form th:action="@{'/admin/order/' + ${orderId} + '/clothes'}"
+      method="post"
+      enctype="multipart/form-data"
+      style="width: 95%; max-width: 900px; margin: 0 auto 30px auto;">
+
+    <fieldset style="border: 1px solid #90caf9; padding: 18px; border-radius: 12px; background:#e3f2fd;">
+        <legend style="color:#1565c0; font-weight: bold;">Add New Item</legend>
+
+        <label>Garment Type:</label>
+        <select name="garmentId" required style="padding: 8px; margin-bottom: 10px; width: 100%;">
+            <option th:each="g : ${garments}" th:value="${g.id}" th:text="${g.name}"></option>
+        </select>
+
+        <label>Quantity:</label>
+        <input type="number" name="quantity" min="1" value="1" required
+               style="padding: 8px; margin-bottom: 10px; width: 100%;">
+
+        <label>Notes:</label>
+        <textarea name="notes" rows="2" style="padding: 8px; margin-bottom: 10px; width: 100%;">Good</textarea>
+
+        <label>Image (optional):</label>
+        <input type="file" name="imageFile" accept="image/*" capture="environment"
+               style="padding: 8px; margin-bottom: 15px; width: 100%;">
+
+        <button type="submit"
+                style="background:#1976d2; color:white; padding:10px 22px; border:none; border-radius:6px; width:100%;
+                font-weight:bold; cursor:pointer;">
+            + save
+        </button>
+    </fieldset>
+</form>
+
+
+
+<br/>
+<a href="/admin/orders">← Back to Orders</a>
+
+<a href="client-dashboard.html">client Home page </a>
+</body>
+</html>

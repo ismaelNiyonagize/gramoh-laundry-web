@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f5f8fd;
+        }
+        .admin-dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(180deg, #1565c0 70%, #1976d2 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 0 0 0;
+            box-shadow: 2px 0 12px rgba(21,101,192,0.08);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 10;
+            transition: left 0.2s;
+        }
+        .sidebar h2 {
+            font-size: 1.4rem;
+            margin: 0 0 32px 32px;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 32px;
+            margin-right: 32px;
+        }
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 18px;
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.08em;
+            background: transparent;
+            transition: background 0.18s, color 0.18s;
+            margin-bottom: 2px;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .main-content {
+            margin-left: 240px;
+            padding: 48px 32px 32px 32px;
+            flex: 1;
+            min-width: 0;
+            background: #b7d7f6;
+            min-height: 80vh;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(21,101,192,0.07);
+            transition: margin-left 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            background: #1565c0;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 1.3em;
+            z-index: 20;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(21,101,192,0.08);
+        }
+        @media (max-width: 900px) {
+            .sidebar {
+                left: -260px;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 32px 8vw 24px 8vw;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 24px 2vw 18px 2vw;
+            }
+            .sidebar h2 {
+                font-size: 1.1rem;
+                margin-left: 18px;
+            }
+            .sidebar-nav {
+                margin-left: 12px;
+                margin-right: 12px;
+            }
+            .sidebar {
+                width: 80vw;
+                min-width: 180px;
+                max-width: 95vw;
+            }
+        }
+    </style>
+
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('open');
+        }
+        // Optional: close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            var sidebar = document.getElementById('adminSidebar');
+            var toggleBtn = document.getElementById('sidebarToggleBtn');
+            if(window.innerWidth <= 900 && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(e.target) && e.target !== toggleBtn) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+<div class="admin-dashboard-container">
+    <button class="sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidebar()">&#9776;</button>
+    <nav class="sidebar" id="adminSidebar">
+        <h2>Admin Panel</h2>
+        <div class="sidebar-nav">
+            <a th:href="@{/admin}" class="active">Dashboard</a>
+            <a th:href="@{/admin/orders}">Orders</a>
+            <a th:href="@{/admin/order/clothes}">Add Clothes</a>
+            <a th:href="@{/admin/orders/verify}">Verify Orders</a>
+
+            <a th:href="@{/admin/reports}">Print PDF For Order</a>
+            <a th:href="@{garments/admin}">Manage Garments </a>
+
+
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h2>Welcome, Admin!</h2>
+        <p>This is a placeholder dashboard. You can add real admin features later.</p>
+    </div>
+</div>
+</body>
+
+</html>

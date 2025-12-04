@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders for Staff</title>
+</head>
+<body>
+<h2>Orders</h2>
+
+<table border="1" id="ordersTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Client</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}" th:attr="data-order-id=${order.id}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.client.fullName}"></td>
+        <td th:text="${order.status}" class="status-cell"></td>
+        <td class="action-cell">
+
+            <!-- ✅ Always show Verify button -->
+            <button class="verify-btn"
+                    th:data-id="${order.id}">
+                Verify
+            </button>
+
+            <!-- Add Clothes link (for pending orders) -->
+            <a th:if="${order.status.name() == 'PENDING'}"
+               th:href="@{/admin/order/{id}/clothes(id=${order.id})}">
+                Add Clothes
+            </a>
+
+            <!-- View Time Slot (if exists) -->
+            <a th:if="${order.deliverySlot != null}"
+               th:href="@{/admin/order/{id}/timeslot(id=${order.id})}">
+                View Time Slot
+            </a>
+
+            <!-- Mark Ready button (for washing orders) -->
+            <form th:if="${order.status.name() == 'WASHING'}"
+                  th:action="@{'/admin/order/' + ${order.id} + '/ready'}"
+                  method="post"
+                  style="display:inline;">
+                <button type="submit">Mark Ready</button>
+            </form>
+
+            <!-- Optional: text feedback for other statuses -->
+            <span th:if="${order.status.name() == 'READY'}">✅ Ready for Delivery</span>
+            <span th:if="${order.status.name() == 'DELIVERED'}">📦 Delivered</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".verify-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const orderId = this.dataset.id;
+                const row = this.closest("tr");
+                const statusCell = row.querySelector(".status-cell");
+                const actionCell = row.querySelector(".action-cell");
+                const button = this;
+
+                button.disabled = true;
+                button.textContent = "Verifying...";
+
+                fetch(`/admin/order/${orderId}/verify`, {
+                    method: "POST",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: ""
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Verify failed");
+                    // Replace button with ✅ label
+                    actionCell.innerHTML = "<span>✅ Verified</span>";
+                    statusCell.textContent = "VERIFIED";
+                })
+                .catch(err => {
+                    alert("Error verifying order: " + err.message);
+                    button.disabled = false;
+                    button.textContent = "Verify";
+                });
+            });
+        });
+    });
+</script>
+
+<br/>
+
+
+<a th:href="@{/admin}">Home page for admin</a>
+</body>
+</html>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #e3f2fd;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        color: #1565c0;
+        margin-top: 40px;
+        margin-bottom: 24px;
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+
+    table {
+        background: #fff;
+        max-width: 700px;
+        margin: 32px auto 0 auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(21,101,192,0.10);
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 16px 18px;
+        text-align: left;
+        font-size: 1.08rem;
+    }
+
+    th {
+        background: #bbdefb;
+        color: #1565c0;
+        font-weight: 600;
+        border-bottom: 1px solid #90caf9;
+    }
+
+    td {
+        background: #fff;
+        color: #2d3a4b;
+        border-bottom: 1px solid #e3f2fd;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    a, .verify-btn {
+        color: #1976d2;
+        background: #e3f2fd;
+        padding: 8px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        box-shadow: 0 1px 4px rgba(21,101,192,0.07);
+        transition: background 0.2s, color 0.2s;
+        display: inline-block;
+        margin-bottom: 4px;
+        margin-right: 6px;
+        border: none;
+        cursor: pointer;
+    }
+
+    a:hover, .verify-btn:hover {
+        background: #1976d2;
+        color: #fff;
+    }
+
+    button[type="submit"] {
+        background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 18px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 4px;
+        margin-right: 6px;
+        box-shadow: 0 2px 8px rgba(21,101,192,0.08);
+        transition: background 0.2s;
+    }
+
+    button[type="submit"]:hover {
+        background: linear-gradient(90deg, #1565c0 60%, #1976d2 100%);
+    }
+
+    span {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 1em;
+        margin-bottom: 4px;
+        background: #c8e6c9;
+        color: #2e7d32;
+        border: 1px solid #81c784;
+    }
+
+    @media (max-width: 700px) {
+        table {
+            max-width: 98vw;
+            margin: 18px 1vw 0 1vw;
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(21,101,192,0.07);
+        }
+        th, td {
+            padding: 10px 8px;
+            font-size: 1rem;
+        }
+        h2 {
+            font-size: 1.3rem;
+            margin-top: 24px;
+        }
+        a, .verify-btn, button[type="submit"], span {
+            font-size: 1rem;
+            padding: 10px 0;
+            width: 95vw;
+            margin-bottom: 6px;
+        }
+    }
+</style>

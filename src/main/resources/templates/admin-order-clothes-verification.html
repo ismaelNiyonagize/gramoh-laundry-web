@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Verify Clothes - Gramoh Laundry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 0; }
+        h2 { text-align: center; color: #1565c0; margin-top: 40px; margin-bottom: 24px; font-size: 2rem; }
+        table { background: #fff; max-width: 900px; margin: 32px auto; border-radius: 10px;
+                box-shadow: 0 2px 12px rgba(21,101,192,0.10); width: 100%; border-collapse: separate;
+                border-spacing: 0; overflow: hidden; }
+        th, td { padding: 14px 16px; text-align: center; font-size: 1.05rem; }
+        th { background: #bbdefb; color: #1565c0; font-weight: 600; border-bottom: 1px solid #90caf9; }
+        td { background: #fff; color: #2d3a4b; border-bottom: 1px solid #e3f2fd; }
+        tr:last-child td { border-bottom: none; }
+        button { background-color: #1976d2; color: #fff; border: none; padding: 10px 20px;
+                 border-radius: 6px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        button:hover { background-color: #0d47a1; }
+        img { border-radius: 8px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        .info { text-align: center; margin-top: 10px; color: #555; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 th:text="'Verify Clothes for Order #' + ${order.id}"></h2>
+    <p class="info" th:text="'Client: ' + ${order.client.fullName}"></p>
+    <p class="info" th:text="'Status: ' + ${order.status}"></p>
+
+    <form th:action="@{/admin/orders/confirm-verification}" method="post">
+        <input type="hidden" name="orderId" th:value="${order.id}" />
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Notes</th>
+                <th>Image</th>
+                <th>Verify</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="clothes : ${clothesList}">
+                <td th:text="${clothes.id}"></td>
+                <td th:text="${clothes.type}"></td>
+                <td th:text="${clothes.quantity}"></td>
+                <td th:text="${clothes.notes != null ? clothes.notes : 'N/A'}"></td>
+                <td>
+                    <img th:if="${clothes.imageUrl != null}" th:src="${clothes.imageUrl}" alt="Clothes image" width="80" />
+                    <span th:if="${clothes.imageUrl == null}">No image</span>
+                </td>
+                <td><input type="checkbox" name="verifiedIds" th:value="${clothes.id}" /></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align:center; margin-top:20px;">
+            <button type="submit">Confirm Verification</button>
+        </div>
+    </form>
+</div>
+
+<a th:href="@{/admin}">Home page for admin</a>
+</body>
+</html>

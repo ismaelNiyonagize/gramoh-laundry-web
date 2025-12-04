@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Confirm Clothes</title>
+</head>
+<body>
+<h2>Confirm Your Clothes</h2>
+
+<p>Please check that these are exactly what you gave us:</p>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Quantity</th>
+        <th>Notes</th>
+        <th>Picture</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${clothes}">
+        <td th:text="${c.type}"></td>
+        <td th:text="${c.quantity}"></td>
+        <td th:text="${c.notes}"></td>
+        <td><img th:src="${c.imageUrl}" alt="Clothes image" width="100"/></td>
+    </tr>
+    </tbody>
+</table>
+
+<form th:action="@{/order/{orderId}/confirm-clothes(orderId=${order.id})}" method="post">
+    <button type="submit">Confirm Clothes</button>
+</form>
+
+<br/>
+<a href="/order/list">Back to My Orders</a>
+
+<a href="client-dashboard.html">client Home page </a>
+
+</body>
+</html>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f6f8fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        color: #2563eb;
+        margin-top: 40px;
+        margin-bottom: 24px;
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+
+    p {
+        text-align: center;
+        color: #1746a2;
+        font-size: 1.08rem;
+        margin-bottom: 24px;
+    }
+
+    table {
+        background: #fff;
+        max-width: 600px;
+        margin: 0 auto 32px auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(44,62,80,0.07);
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 16px 18px;
+        text-align: left;
+        font-size: 1.08rem;
+    }
+
+    th {
+        background: #e3f0ff;
+        color: #2563eb;
+        font-weight: 600;
+        border-bottom: 1px solid #b6d4fe;
+    }
+
+    td {
+        background: #fff;
+        color: #2d3a4b;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+
+    tr:last-child th, tr:last-child td {
+        border-bottom: none;
+    }
+
+    img {
+        border-radius: 6px;
+        border: 1px solid #e3f0ff;
+        background: #f6f8fa;
+        max-width: 100px;
+        max-height: 100px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 24px;
+    }
+
+    button[type="submit"] {
+        background: linear-gradient(90deg, #2563eb 60%, #4f8cff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 32px;
+        font-size: 1.08rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+        transition: background 0.2s;
+    }
+
+    button[type="submit"]:hover {
+        background: linear-gradient(90deg, #1746a2 60%, #2563eb 100%);
+    }
+
+    a {
+        display: block;
+        width: fit-content;
+        margin: 32px auto 0 auto;
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.08rem;
+        padding: 10px 24px;
+        border-radius: 6px;
+        background: #e3f0ff;
+        border: 1px solid #2563eb;
+        transition: background 0.2s, color 0.2s;
+        text-align: center;
+    }
+
+    a:hover {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    @media (max-width: 700px) {
+        table {
+            max-width: 98vw;
+            margin: 0 1vw 32px 1vw;
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(44,62,80,0.07);
+        }
+        th, td {
+            padding: 10px 8px;
+            font-size: 1rem;
+        }
+        img {
+            max-width: 70px;
+            max-height: 70px;
+        }
+    }
+
+    @media (max-width: 500px) {
+        h2 {
+            font-size: 1.3rem;
+            margin-top: 24px;
+        }
+        table {
+            max-width: 99vw;
+            margin: 0 0.5vw 18px 0.5vw;
+        }
+        th, td {
+            font-size: 0.98rem;
+            padding: 8px 4px;
+        }
+        button[type="submit"] {
+            font-size: 1rem;
+            padding: 10px 0;
+            width: 95vw;
+        }
+        a {
+            font-size: 1rem;
+            padding: 10px 0;
+            width: 95vw;
+        }
+    }
+</style>
