@@ -124,10 +124,10 @@ public class ClothesController {
             double remaining = limit > 0 ? Math.max(0, limit - usedWeight) : 0.0;
 
             document.add(new Paragraph("Subscription Package: " + (pkg != null ? pkg.getName() : "N/A"), normalFont));
-            document.add(new Paragraph(String.format("Package Limit: %.1f kg / month", limit), normalFont));
-            document.add(new Paragraph(String.format("Used This Month: %.1f kg", usedWeight), normalFont));
-            document.add(new Paragraph(String.format("Remaining Weight: %.1f kg", remaining), normalFont));
-            document.add(new Paragraph(String.format("This Order Weight: %.1f kg", currentOrderWeight), normalFont));
+            document.add(new Paragraph(String.format("Package Limit / Ibiro Byukwezi: %.1f kg / month", limit), normalFont));
+            document.add(new Paragraph(String.format("Used This Month / Ibiro bimaze Gukoreshwa: %.1f kg", usedWeight), normalFont));
+            document.add(new Paragraph(String.format("Remaining Weight / Ibiro Bisigaye: %.1f kg", remaining), normalFont));
+            document.add(new Paragraph(String.format("This Order Weight / Ibiro byiyi Oda : %.1f kg", currentOrderWeight), normalFont));
             document.add(Chunk.NEWLINE);
 
         } catch (Exception e) {

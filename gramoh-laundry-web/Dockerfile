@@ -13,7 +13,10 @@ RUN mvn package -DskipTests
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+#COPY --from=build /app/target/*.jar app.jar
+
+COPY --from=build /app/target/gramoh-laundry-web-*.jar app.jar
+
 
 EXPOSE 8080
 

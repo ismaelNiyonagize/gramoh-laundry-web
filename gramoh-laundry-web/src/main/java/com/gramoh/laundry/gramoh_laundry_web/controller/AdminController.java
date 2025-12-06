@@ -126,22 +126,6 @@ public class AdminController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @PostMapping("/order/{orderId}/ready")
     public String markOrderReady(@PathVariable Long orderId) {
         Order order = orderService.getOrderById(orderId).orElse(null);
