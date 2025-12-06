@@ -177,30 +177,61 @@ public class ClothesController {
 //            } catch (Exception ignored) {}
 
 
+//            Image img = null;
+//            try {
+//                if (c.getImageUrl() != null && !c.getImageUrl().isEmpty()) {
+//
+//                    if (c.getImageUrl().startsWith("http")) {
+//                        // Load from Cloudinary URL
+//                        URL url = new URL(c.getImageUrl());
+//                        try (InputStream in = url.openStream()) {
+//                            byte[] bytes = in.readAllBytes();
+//                            img = Image.getInstance(bytes);
+//                        }
+//                    } else {
+//                        // Local file (development only)
+//                        File f = new File("uploads/" + c.getImageUrl().replace("\\", "/"));
+//                        if (f.exists()) img = Image.getInstance(f.toURI().toURL());
+//                    }
+//                }
+//
+//                if (img != null) img.scaleToFit(80, 80);
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+
             Image img = null;
             try {
                 if (c.getImageUrl() != null && !c.getImageUrl().isEmpty()) {
 
+                    // 1️⃣ Try Cloudinary URL
                     if (c.getImageUrl().startsWith("http")) {
-                        // Load from Cloudinary URL
-                        URL url = new URL(c.getImageUrl());
-                        try (InputStream in = url.openStream()) {
-                            byte[] bytes = in.readAllBytes();
-                            img = Image.getInstance(bytes);
+                        try {
+                            img = Image.getInstance(new URL(c.getImageUrl()));
+                        } catch (Exception cloudEx) {
+                            System.out.println("Cloudinary image load failed for Clothes ID " + c.getId() + ": " + cloudEx.getMessage());
                         }
-                    } else {
-                        // Local file (development only)
-                        File f = new File("uploads/" + c.getImageUrl().replace("\\", "/"));
-                        if (f.exists()) img = Image.getInstance(f.toURI().toURL());
                     }
+
+                    // 2️⃣ Local file fallback (development)
+                    if (img == null) {
+                        File f = new File("uploads/" + c.getImageUrl().replace("\\", "/"));
+                        if (f.exists()) {
+                            img = Image.getInstance(f.toURI().toURL());
+                        } else {
+                            System.out.println("Local image not found for Clothes ID " + c.getId());
+                        }
+                    }
+
+                    // 3️⃣ Scale image if successfully loaded
+                    if (img != null) img.scaleToFit(80, 80);
                 }
-
-                if (img != null) img.scaleToFit(80, 80);
-
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Unexpected error loading image for Clothes ID " + c.getId() + ": " + e.getMessage());
+                img = null;
             }
-
 
 
 
