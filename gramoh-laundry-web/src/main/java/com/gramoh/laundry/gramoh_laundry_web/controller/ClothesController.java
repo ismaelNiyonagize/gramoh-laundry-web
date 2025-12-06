@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -154,25 +156,67 @@ public class ClothesController {
             block.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             block.getDefaultCell().setPadding(3f);
 
+//            Image img = null;
+//            try {
+//                String path = null;
+//                if (c.getImageUrl() != null && !c.getImageUrl().isEmpty()) {
+//                    String cleanUrl = c.getImageUrl().replace("\\", "/");
+//                    if (cleanUrl.contains("uploads/order_")) {
+//                        path = "D:/Gramoh/System to deploy/gramoh-laundry-web/" + cleanUrl;
+//                    } else {
+//                        path = baseUploadDir + "order_" + order.getId() + "/" + cleanUrl;
+//                    }
+//                }
+//                if (path != null) {
+//                    File f = new File(path);
+//                    if (f.exists()) {
+//                        img = Image.getInstance(f.toURI().toURL());
+//                        img.scaleToFit(80, 80);
+//                    }
+//                }
+//            } catch (Exception ignored) {}
+
+
             Image img = null;
             try {
-                String path = null;
                 if (c.getImageUrl() != null && !c.getImageUrl().isEmpty()) {
-                    String cleanUrl = c.getImageUrl().replace("\\", "/");
-                    if (cleanUrl.contains("uploads/order_")) {
-                        path = "D:/Gramoh/System to deploy/gramoh-laundry-web/" + cleanUrl;
+
+                    if (c.getImageUrl().startsWith("http")) {
+                        // Load from Cloudinary URL
+                        URL url = new URL(c.getImageUrl());
+                        try (InputStream in = url.openStream()) {
+                            byte[] bytes = in.readAllBytes();
+                            img = Image.getInstance(bytes);
+                        }
                     } else {
-                        path = baseUploadDir + "order_" + order.getId() + "/" + cleanUrl;
+                        // Local file (development only)
+                        File f = new File("uploads/" + c.getImageUrl().replace("\\", "/"));
+                        if (f.exists()) img = Image.getInstance(f.toURI().toURL());
                     }
                 }
-                if (path != null) {
-                    File f = new File(path);
-                    if (f.exists()) {
-                        img = Image.getInstance(f.toURI().toURL());
-                        img.scaleToFit(80, 80);
-                    }
-                }
-            } catch (Exception ignored) {}
+
+                if (img != null) img.scaleToFit(80, 80);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             if (img != null) {
                 PdfPCell imgCell = new PdfPCell(img, true);
