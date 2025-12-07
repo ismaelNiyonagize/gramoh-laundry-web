@@ -17,11 +17,25 @@ public class ImageUploadService {
     @Autowired
     private Cloudinary cloudinary;
 
-    public String upload(MultipartFile file) throws IOException {
+
+
+
+
+    /**
+     * Upload image to Cloudinary with public access and order-based folder
+     */
+    public String upload(MultipartFile file, Long orderId) throws IOException {
+
         Map uploadResult = cloudinary.uploader().upload(
                 file.getBytes(),
-                ObjectUtils.asMap("folder", "gramoh_laundry")
+                ObjectUtils.asMap(
+                        "folder", "gramoh/order_" + orderId,
+                        "resource_type", "image",
+                        "type", "upload",
+                        "access_mode", "public"
+                )
         );
+
         return uploadResult.get("secure_url").toString();
     }
 }

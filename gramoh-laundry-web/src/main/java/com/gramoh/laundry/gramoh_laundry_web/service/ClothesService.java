@@ -25,6 +25,9 @@ public class ClothesService {
     private final OrderService orderService;
     private final GarmentTypeService garmentTypeService;
 
+    @Autowired
+    private ImageUploadService imageUploadService;
+
     public ClothesService(ClothesRepository clothesRepository,
                           OrderService orderService,
                           GarmentTypeService garmentTypeService) {
@@ -62,14 +65,19 @@ public class ClothesService {
 
 
         // 4️⃣ Handle image upload
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//
+//            Map uploadResult = cloudinary.uploader().upload(
+//                    imageFile.getBytes(),
+//                    ObjectUtils.asMap("folder", "gramoh/order_" + orderId)
+//            );
+//
+//            String imageUrl = (String) uploadResult.get("secure_url");
+//            clothes.setImageUrl(imageUrl);
+//        }
+
         if (imageFile != null && !imageFile.isEmpty()) {
-
-            Map uploadResult = cloudinary.uploader().upload(
-                    imageFile.getBytes(),
-                    ObjectUtils.asMap("folder", "gramoh/order_" + orderId)
-            );
-
-            String imageUrl = (String) uploadResult.get("secure_url");
+            String imageUrl = imageUploadService.upload(imageFile, orderId);
             clothes.setImageUrl(imageUrl);
         }
 
